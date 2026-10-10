@@ -40,18 +40,18 @@
         compatible = "zmk,combos";
 
         // Mouse clicks moved to the left hand so the right hand can stay on the trackball.
-        // C + V = Left click (middle + index fingers)
+        // X + C = Left click (left adjacent pair)
         combo_LCLK {
             timeout-ms = <40>;
-            key-positions = <27 28>;
+            key-positions = <26 27>;
             bindings = <&mkp LCLK>;
             layers = <L_BASE>;
         };
 
-        // X + C = Right click (ring + middle fingers)
+        // C + V = Right click (right adjacent pair)
         combo_RCLK {
             timeout-ms = <40>;
-            key-positions = <26 27>;
+            key-positions = <27 28>;
             bindings = <&mkp RCLK>;
             layers = <L_BASE>;
         };
