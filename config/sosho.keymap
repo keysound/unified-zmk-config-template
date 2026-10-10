@@ -1,4 +1,4 @@
-// 船長版 So-Sho keymap v1.2
+// 船長版 So-Sho keymap v1.3
 // 目標：保留 QWERTY 肌肉記憶，把 NAV / SYM / SYS 重新分工。
 // 適用：右手 Trackball + 左手 Trackpad（keymap 本身左右 pointing device 皆可共用）
 
@@ -39,26 +39,29 @@
     combos {
         compatible = "zmk,combos";
 
-        // Keep ELEKIT's original mouse-click combos for now.
-        // J + K = Left click
+        // Mouse clicks moved to the left hand so the right hand can stay on the trackball.
+        // C + V = Left click (middle + index fingers)
         combo_LCLK {
-            timeout-ms = <50>;
-            key-positions = <19 20>;
+            timeout-ms = <40>;
+            key-positions = <27 28>;
             bindings = <&mkp LCLK>;
+            layers = <L_BASE>;
         };
 
-        // K + L = Right click
+        // X + C = Right click (ring + middle fingers)
         combo_RCLK {
-            timeout-ms = <50>;
-            key-positions = <20 21>;
+            timeout-ms = <40>;
+            key-positions = <26 27>;
             bindings = <&mkp RCLK>;
+            layers = <L_BASE>;
         };
 
-        // J + L = Middle click
+        // X + V = Middle click (ring + index fingers)
         combo_MCLK {
-            timeout-ms = <90>;
-            key-positions = <19 21>;
+            timeout-ms = <40>;
+            key-positions = <26 28>;
             bindings = <&mkp MCLK>;
+            layers = <L_BASE>;
         };
 
         // D + F = momentary NAV.
