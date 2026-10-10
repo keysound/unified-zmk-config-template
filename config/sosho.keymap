@@ -70,23 +70,24 @@
         /*
          * BASE
          *
-         *  TAB    Q    W    E    R    T   |   Y    U    I    O    P    DEL
+         *  TAB    Q    W    E    R    T   |   Y    U    I    O    P   BSPC
          *  CTRL   A    S    D    F    G   |   H    J    K    L    ;   ENTER
          *  SHIFT  Z    X    C    V    B   |   N    M    ,    .    /   RSHIFT
-         *  ESC   ALT        NAV  SPACE    |  BSPC  SYM       SYS   GUI
+         *  ESC   ALT       SPACE NAV      |   DEL  SYM       SYS   GUI
          *
          * 與官方版相比：
          * - ; 回到 Base，對 C/C++ 比 ' 實用。
-         * - Backspace 移到右拇指；右上角改 Delete。
-         * - NAV 由左拇指啟動，主要導航鍵在右手。
+         * - Backspace 回到右上角；Delete 移到右拇指。
+         * - Space 與 NAV 互換，讓高頻 Space 落在較順手的左拇指位置。
+         * - NAV 仍由左拇指啟動，主要導航鍵在右手。
          * - SYM 由右拇指啟動，常用程式符號集中在左手。
          */
         default_layer {
             bindings = <
-                &kp TAB    &kp Q     &kp W     &kp E     &kp R     &kp T        &kp Y       &kp U     &kp I      &kp O      &kp P       &kp DEL
+                &kp TAB    &kp Q     &kp W     &kp E     &kp R     &kp T        &kp Y       &kp U     &kp I      &kp O      &kp P       &kp BSPC
                 &kp LCTRL  &kp A     &kp S     &kp D     &kp F     &kp G        &kp H       &kp J     &kp K      &kp L      &kp SEMI    &kp ENTER
                 &kp LSHFT  &kp Z     &kp X     &kp C     &kp V     &kp B        &kp N       &kp M     &kp COMMA  &kp DOT    &kp SLASH   &kp RSHFT
-                &kp ESC    &kp LALT              &mo L_NAV &kp SPACE            &kp BSPC     &mo L_SYM                &mo L_SYS &kp LGUI
+                &kp ESC    &kp LALT              &kp SPACE &mo L_NAV            &kp DEL      &mo L_SYM                &mo L_SYS &kp LGUI
             >;
 
             sensor-bindings = <
