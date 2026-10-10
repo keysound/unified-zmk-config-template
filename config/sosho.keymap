@@ -1,4 +1,4 @@
-// 船長版 So-Sho keymap
+// 船長版 So-Sho keymap v1.2
 // 目標：保留 QWERTY 肌肉記憶，把 NAV / SYM / SYS 重新分工。
 // 適用：右手 Trackball + 左手 Trackpad（keymap 本身左右 pointing device 皆可共用）
 
@@ -60,6 +60,17 @@
             key-positions = <19 21>;
             bindings = <&mkp MCLK>;
         };
+
+        // D + F = momentary NAV.
+        // slow-release: after triggering with D+F, NAV remains active
+        // until both combo keys are released.
+        combo_NAV {
+            timeout-ms = <40>;
+            key-positions = <15 16>;
+            bindings = <&mo L_NAV>;
+            layers = <L_BASE>;
+            slow-release;
+        };
     };
 };
 
@@ -73,13 +84,13 @@
          *  TAB    Q    W    E    R    T   |   Y    U    I    O    P   BSPC
          *  CTRL   A    S    D    F    G   |   H    J    K    L    ;   ENTER
          *  SHIFT  Z    X    C    V    B   |   N    M    ,    .    /   RSHIFT
-         *  ESC   ALT       SPACE NAV      |   DEL  SYM       SYS   GUI
+         *  ESC   ALT       SPACE ----     |   DEL  SYM       SYS   GUI
          *
          * 與官方版相比：
          * - ; 回到 Base，對 C/C++ 比 ' 實用。
          * - Backspace 回到右上角；Delete 移到右拇指。
-         * - Space 與 NAV 互換，讓高頻 Space 落在較順手的左拇指位置。
-         * - NAV 仍由左拇指啟動，主要導航鍵在右手。
+         * - Space 留在較順手的左拇指位置。
+         * - 拇指 NAV 取消，改用左手 D+F combo 進入 NAV。
          * - SYM 由右拇指啟動，常用程式符號集中在左手。
          */
         default_layer {
@@ -87,7 +98,7 @@
                 &kp TAB    &kp Q     &kp W     &kp E     &kp R     &kp T        &kp Y       &kp U     &kp I      &kp O      &kp P       &kp BSPC
                 &kp LCTRL  &kp A     &kp S     &kp D     &kp F     &kp G        &kp H       &kp J     &kp K      &kp L      &kp SEMI    &kp ENTER
                 &kp LSHFT  &kp Z     &kp X     &kp C     &kp V     &kp B        &kp N       &kp M     &kp COMMA  &kp DOT    &kp SLASH   &kp RSHFT
-                &kp ESC    &kp LALT              &kp SPACE &mo L_NAV            &kp DEL      &mo L_SYM                &mo L_SYS &kp LGUI
+                &kp ESC    &kp LALT              &kp SPACE &none                &kp DEL      &mo L_SYM                &mo L_SYS &kp LGUI
             >;
 
             sensor-bindings = <
@@ -98,7 +109,8 @@
 
         /*
          * NAV
-         * 左拇指按住 NAV，右手負責導航。
+         * 左手 D+F combo 觸發 NAV，右手負責導航。
+         * combo 使用 slow-release，可先 D+F 觸發，再只留其中一指壓住。
          *
          *  ----   ---- ---- ---- ---- ---- | PgUp  Home   Up    End   PgDn  Del
          *  ----   ---- ---- ---- ---- ---- | Ctrl← Left  Down  Right Ctrl→  ----
