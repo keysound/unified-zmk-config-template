@@ -1,5 +1,13 @@
-//スクロール量の調整(デフォルト150)
+// 船長版 So-Sho keymap
+// 目標：保留 QWERTY 肌肉記憶，把 NAV / SYM / SYS 重新分工。
+// 適用：右手 Trackball + 左手 Trackpad（keymap 本身左右 pointing device 皆可共用）
+
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 150
+
+#define L_BASE 0
+#define L_NAV  1
+#define L_SYM  2
+#define L_SYS  3
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
@@ -8,11 +16,12 @@
 #include <dt-bindings/zmk/outputs.h>
 
 / {
-	behaviors {
+    behaviors {
         ec_ms_l: ec_ms_h {
             compatible = "zmk,behavior-encoder-mouse-scroll";
             #sensor-binding-cells = <2>;
         };
+
         ec_ms_r: ec_ms_v {
             compatible = "zmk,behavior-encoder-mouse-scroll";
             #sensor-binding-cells = <2>;
@@ -20,89 +29,141 @@
     };
 };
 
-//スクロールの調整
+// Encoder scroll: no acceleration.
 &msc {
-    time-to-max-speed-ms = <0>;   // 即座に最大速度（加速なし）
-    acceleration-exponent = <0>;   // 加速なし
+    time-to-max-speed-ms = <0>;
+    acceleration-exponent = <0>;
 };
 
-/{
+/ {
     combos {
         compatible = "zmk,combos";
-		//左クリックのコンボ 19はJのキー 20はKのキーに相当します。
-	    combo_LCLK {
+
+        // Keep ELEKIT's original mouse-click combos for now.
+        // J + K = Left click
+        combo_LCLK {
             timeout-ms = <50>;
             key-positions = <19 20>;
             bindings = <&mkp LCLK>;
         };
 
-		//右クリックのコンボ 20 K 21 L
+        // K + L = Right click
         combo_RCLK {
             timeout-ms = <50>;
             key-positions = <20 21>;
             bindings = <&mkp RCLK>;
         };
 
-		//ホイールクリックのコンボ 19 J 21 L
-	    combo_MCLK {
+        // J + L = Middle click
+        combo_MCLK {
             timeout-ms = <90>;
             key-positions = <19 21>;
             bindings = <&mkp MCLK>;
         };
-
     };
 };
 
-/{
-keymap {
-    compatible = "zmk,keymap";
+/ {
+    keymap {
+        compatible = "zmk,keymap";
 
-    default_layer {
-        bindings = <
-            &kp TAB    &kp Q   &kp W  &kp E  &kp R  &kp T      &kp Y  &kp U  &kp I      &kp O    &kp P     &kp BSPC
-            &kp LCTRL  &kp A   &kp S  &kp D  &kp F  &kp G      &kp H  &kp J  &kp K      &kp L    &kp SQT   &kp ENTER
-            &kp LSHFT  &kp Z   &kp X  &kp C  &kp V  &kp B      &kp N  &kp M  &kp COMMA  &kp DOT  &kp SLASH &kp LSHFT
-            &kp ESC    &kp LALT              &mo 2  &kp SPACE  &mo 1  &kp LA(GRAVE)              &mo 3     &kp LGUI
-        >;
-		//&ec_ms_lとrは、上のビヘイビアで作ったもの。
-        sensor-bindings = <&ec_ms_l SCRL_LEFT SCRL_RIGHT &ec_ms_r SCRL_DOWN SCRL_UP>;
-    };
-	
-    layer_1 {
-        bindings = <
-            &kp GRAVE &kp N1  &kp N2  &kp N3  &kp N4  &kp N5       &kp N6    &kp N7   &kp N8   &kp N9    &kp N0 &kp DEL
-            &trans    &trans &trans &trans &trans &trans           &kp PG_UP &kp HOME &kp UP   &kp END   &trans &trans
-            &trans    &trans &trans &trans &trans &trans           &kp PG_DN &kp LEFT &kp DOWN &kp RIGHT &trans &trans
-            &trans    &trans               &trans &trans           &trans    &trans                      &trans &trans
-        >;
-    };
+        /*
+         * BASE
+         *
+         *  TAB    Q    W    E    R    T   |   Y    U    I    O    P    DEL
+         *  CTRL   A    S    D    F    G   |   H    J    K    L    ;   ENTER
+         *  SHIFT  Z    X    C    V    B   |   N    M    ,    .    /   RSHIFT
+         *  ESC   ALT        NAV  SPACE    |  BSPC  SYM       SYS   GUI
+         *
+         * 與官方版相比：
+         * - ; 回到 Base，對 C/C++ 比 ' 實用。
+         * - Backspace 移到右拇指；右上角改 Delete。
+         * - NAV 由左拇指啟動，主要導航鍵在右手。
+         * - SYM 由右拇指啟動，常用程式符號集中在左手。
+         */
+        default_layer {
+            bindings = <
+                &kp TAB    &kp Q     &kp W     &kp E     &kp R     &kp T        &kp Y       &kp U     &kp I      &kp O      &kp P       &kp DEL
+                &kp LCTRL  &kp A     &kp S     &kp D     &kp F     &kp G        &kp H       &kp J     &kp K      &kp L      &kp SEMI    &kp ENTER
+                &kp LSHFT  &kp Z     &kp X     &kp C     &kp V     &kp B        &kp N       &kp M     &kp COMMA  &kp DOT    &kp SLASH   &kp RSHFT
+                &kp ESC    &kp LALT              &mo L_NAV &kp SPACE            &kp BSPC     &mo L_SYM                &mo L_SYS &kp LGUI
+            >;
 
-    layer_2 {
-        bindings = <
-            &trans &kp F1  &kp F2  &kp F3  &kp F4  &kp F5     &trans  &trans    &kp MINUS &kp EQUAL &trans     &trans
-            &trans &kp F6  &kp F7  &kp F8  &kp F9  &kp F10    &trans  &kp LBKT  &kp RBKT  &kp NUBS  &trans     &trans
-            &trans &kp F11 &kp F12 &kp F13 &kp F14 &kp F15    &trans  &kp SEMI  &kp SQT   &trans    &kp QMARK  &kp BSLH
-            &trans &trans                  &trans  &trans     &trans  &trans                        &trans     &trans
-        >;
-		//レイヤー2のときだけ、左手のエンコーダを回すとボリュームの上下ができるようになっています。
-		sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &ec_ms_r SCRL_DOWN SCRL_UP>;
+            sensor-bindings = <
+                &ec_ms_l SCRL_LEFT SCRL_RIGHT
+                &ec_ms_r SCRL_DOWN SCRL_UP
+            >;
+        };
 
-    };
+        /*
+         * NAV
+         * 左拇指按住 NAV，右手負責導航。
+         *
+         *  ----   ---- ---- ---- ---- ---- | PgUp  Home   Up    End   PgDn  Del
+         *  ----   ---- ---- ---- ---- ---- | Ctrl← Left  Down  Right Ctrl→  ----
+         *  ----   ---- ---- ---- ---- ---- | Undo  Cut   Copy  Paste Redo   ----
+         *  ----   ----      ---- ----      | ----  ----      ----  ----
+         */
+        nav_layer {
+            bindings = <
+                &trans      &trans       &trans       &trans       &trans       &trans        &kp PG_UP    &kp HOME      &kp UP        &kp END       &kp PG_DN     &kp DEL
+                &trans      &trans       &trans       &trans       &trans       &trans        &kp LC(LEFT) &kp LEFT      &kp DOWN      &kp RIGHT     &kp LC(RIGHT) &trans
+                &trans      &trans       &trans       &trans       &trans       &trans        &kp LC(Z)    &kp LC(X)     &kp LC(C)     &kp LC(V)     &kp LC(Y)     &trans
+                &trans      &trans                    &trans       &trans                     &trans        &trans                      &trans          &trans
+            >;
+        };
 
-    layer_3 {
-        bindings = <
-            &trans &trans &trans &trans &trans &trans      &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3   &bt BT_SEL 4
-            &trans &trans &trans &trans &trans &trans      &trans  &trans        &trans        &trans        &trans         &trans
-            &trans &trans &trans &trans &trans &trans      &trans  &trans        &trans        &trans        &bt BT_CLR_ALL &bt BT_CLR
-            &trans &trans               &trans &trans      &trans  &out OUT_BLE                                    &trans         &trans
-        >;
-    };
-    scroll {
-        status = "reserved";
-    };
+        /*
+         * SYM
+         * 右拇指按住 SYM。
+         *
+         *  `      1    2    3    4    5   |   6    7    8    9    0     =
+         *  ----   (    )    [    ]    \\   |   -    =    ;    '    &     ^
+         *  ----   {    }    <    >    |   |   _    +    :    \"    ?     ~
+         *  ----   ----      ---- ----      | ----  ----      ----  ----
+         *
+         * 括號與 delimiter 全放左手，右手只負責壓住 SYM。
+         */
+        sym_layer {
+            bindings = <
+                &kp GRAVE  &kp N1    &kp N2    &kp N3    &kp N4    &kp N5       &kp N6     &kp N7     &kp N8     &kp N9     &kp N0      &kp EQUAL
+                &trans     &kp LPAR  &kp RPAR  &kp LBKT  &kp RBKT  &kp BSLH     &kp MINUS  &kp EQUAL  &kp SEMI   &kp SQT    &kp AMPS    &kp CARET
+                &trans     &kp LBRC  &kp RBRC  &kp LT    &kp GT    &kp PIPE     &kp UNDER  &kp PLUS   &kp COLON  &kp DQT    &kp QMARK   &kp TILDE
+                &trans     &trans                &trans    &trans                 &trans      &trans                  &trans       &trans
+            >;
+        };
 
-    extra2 {
-        status = "reserved";
+        /*
+         * SYS
+         * 低頻功能全部趕到這一層。
+         *
+         *  F1     F2   F3   F4   F5   F6  | F7    F8    F9    F10   F11   F12
+         *  Prev   Vol- Vol+ Mute Play Next | BT0   BT1   BT2   BT3   BT4   BT_CLR
+         *  PrtSc  Ins  Del  ---- USB  BLE  | BT←   BT→   ----  ---- CLRALL ----
+         *  ----   ----      ---- ----      | ----  ----       ---- ----
+         */
+        sys_layer {
+            bindings = <
+                &kp F1       &kp F2        &kp F3        &kp F4        &kp F5        &kp F6          &kp F7         &kp F8         &kp F9         &kp F10         &kp F11        &kp F12
+                &kp C_PREV   &kp C_VOL_DN  &kp C_VOL_UP  &kp C_MUTE   &kp C_PP      &kp C_NEXT      &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3    &bt BT_SEL 4   &bt BT_CLR
+                &kp PSCRN    &kp INS        &kp DEL       &trans        &out OUT_USB   &out OUT_BLE     &bt BT_PRV     &bt BT_NXT     &trans          &trans           &bt BT_CLR_ALL &trans
+                &trans       &trans                        &trans        &trans                         &trans           &trans                           &trans          &trans
+            >;
+
+            // Left encoder becomes volume on SYS; right encoder keeps vertical scroll.
+            sensor-bindings = <
+                &inc_dec_kp C_VOL_DN C_VOL_UP
+                &ec_ms_r SCRL_DOWN SCRL_UP
+            >;
+        };
+
+        // Keep two reserved layers for later ZMK Studio experiments.
+        scroll {
+            status = "reserved";
+        };
+
+        extra2 {
+            status = "reserved";
+        };
     };
-};
 };
