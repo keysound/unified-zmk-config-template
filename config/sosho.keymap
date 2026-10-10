@@ -1,4 +1,4 @@
-// 船長版 So-Sho keymap v1.3
+// 船長版 So-Sho keymap v1.4
 // 目標：保留 QWERTY 肌肉記憶，把 NAV / SYM / SYS 重新分工。
 // 適用：右手 Trackball + 左手 Trackpad（keymap 本身左右 pointing device 皆可共用）
 
@@ -35,6 +35,21 @@
     acceleration-exponent = <0>;
 };
 
+
+/ {
+    macros {
+        // X + C + V = double left click.
+        // Keep the two clicks far enough apart to be reliably observed by the host.
+        dblclk: dblclk {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <60>;
+            tap-ms = <30>;
+            bindings = <&mkp LCLK &mkp LCLK>;
+        };
+    };
+};
+
 / {
     combos {
         compatible = "zmk,combos";
@@ -61,6 +76,16 @@
             timeout-ms = <40>;
             key-positions = <26 28>;
             bindings = <&mkp MCLK>;
+            layers = <L_BASE>;
+        };
+
+        // X + C + V = double left click.
+        // This intentionally overlaps X+C (left click) and C+V (right click);
+        // v1.4 is an A/B test of ZMK's fully-overlapping combo handling.
+        combo_DBLCLK {
+            timeout-ms = <40>;
+            key-positions = <26 27 28>;
+            bindings = <&dblclk>;
             layers = <L_BASE>;
         };
 
